@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Gunno! 🎂✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #090a14;
+      --bg-card: rgba(22, 24, 42, 0.72);
+      --gold: #ffd166;
+      --gold-bright: #ffe699;
+      --rose: #f4a2b8;
+      --rose-glow: #ff7597;
+      --text-main: #f8f9fa;
+      --text-muted: #b8bedd;
+      --border-glow: rgba(255, 209, 102, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #1b1936 0%, #090a14 70%, #05050a 100%);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Interactive Canvas Overlays */
+    #bg-canvas, #fx-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #fx-canvas {
+      z-index: 9999;
+    }
+
+    /* Sound Toggle Button */
+    .sound-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(22, 24, 42, 0.85);
+      border: 1px solid var(--border-glow);
+      color: var(--gold);
+      padding: 10px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 209, 102, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .sound-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.45);
+    }
+
+    /* Sleek Navigation Bar */
+    header {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      padding: 0 12px;
+    }
+
+    .nav-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: rgba(16, 18, 34, 0.78);
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      backdrop-filter: blur(16px);
+      padding: 8px 12px;
+      border-radius: 60px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 209, 102, 0.1);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 9px 18px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.22), rgba(244, 162, 184, 0.18));
+      border-color: var(--gold);
+      box-shadow: 0 0 18px rgba(255, 209, 102, 0.35);
+    }
+
+    /* Main Content Container */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 20px 90px;
+    }
+
+    .page {
+      display: none;
+      animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 35px 10px 25px;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.1rem, 5.5vw, 4.1rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height: 1.15;
+      background: linear-gradient(90deg, #ffe299 0%, #ffd166 45%, #f4a2b8 80%, #ff7597 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 25px rgba(255, 209, 102, 0.3));
+      margin-bottom: 14px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 2.5vw, 1.55rem);
+      color: #f3d5df;
+      font-weight: 400;
+      margin-bottom: 34px;
+      text-shadow: 0 2px 12px rgba(244, 162, 184, 0.35);
+    }
+
+    /* Celebration CTA Button */
+    .celebrate-btn {
+      position: relative;
+      background: linear-gradient(135deg, #ffe08a 0%, #d49b35 50%, #f4a2b8 100%);
+      color: #1c1204;
+      font-family: inherit;
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 18px 42px;
+      border-radius: 60px;
+      border: 2px solid #fff3c4;
+      cursor: pointer;
+      box-shadow: 0 0 35px rgba(255, 209, 102, 0.65), inset 0 2px 10px rgba(255, 255, 255, 0.8);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .celebrate-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 0 55px rgba(255, 209, 102, 0.95), 0 0 25px rgba(244, 162, 184, 0.8);
+    }
+    .celebrate-btn:active {
+      transform: scale(0.97);
+    }
+
+    .tap-hint {
+      margin-top: 22px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 0.4px;
+    }
+
+    /* 3-Column Feature Cards on Home */
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 209, 102, 0.22);
+      border-radius: 22px;
+      padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .glass-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 209, 102, 0.2);
+    }
+
+    .card-header {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .preview-banner {
+      height: 130px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(103, 58, 183, 0.45), rgba(244, 162, 184, 0.35), rgba(255, 209, 102, 0.35));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      gap: 15px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Section Headings */
+    .section-title {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+
+    /* Wishes & Flip Cards */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .flip-card {
+      background: transparent;
+      height: 270px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 22px;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-glow);
+    }
+    .flip-front {
+      background: linear-gradient(145deg, rgba(28, 30, 56, 0.9), rgba(14, 15, 28, 0.95));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .flip-front .icon {
+      font-size: 3.4rem;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 0 12px rgba(255,209,102,0.5));
+    }
+    .flip-back {
+      background: linear-gradient(145deg, rgba(64, 32, 68, 0.92), rgba(26, 20, 48, 0.96));
+      transform: rotateY(180deg);
+      border-color: var(--rose);
+      box-shadow: 0 0 25px rgba(244, 162, 184, 0.35);
+    }
+    .flip-back p {
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: #fff;
+    }
+
+    /* Mini Games Layout */
+    .games-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    /* Memory Match Board */
+    .memory-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .mem-tile {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glow);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mem-tile.matched {
+      background: rgba(255, 209, 102, 0.25);
+      border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(255, 209, 102, 0.4);
+    }
+
+    /* Spin Wheel */
+    .wheel-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .wheel-container {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      margin: 15px auto;
+    }
+    .wheel-pointer {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8rem;
+      z-index: 5;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
+    }
+    #wheel-canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.4);
+      transition: transform 4s cubic-bezier(0.15, 0.85, 0.25, 1);
+    }
+
+    .small-btn {
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      color: #121324;
+      border: none;
+      padding: 11px 26px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      font-family: inherit;
+      transition: transform 0.2s;
+    }
+    .small-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Quiz Styles */
+    .quiz-box {
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .quiz-option {
+      display: block;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      color: #fff;
+      padding: 15px 20px;
+      margin: 12px 0;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 209, 102, 0.18);
+      border-color: var(--gold);
+      transform: translateX(5px);
+    }
+
+    /* Interactive Cake */
+    .cake-stage {
+      text-align: center;
+      padding: 30px 20px;
+    }
+    .candles-row {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: -8px;
+      position: relative;
+      z-index: 3;
+    }
+    .candle {
+      width: 16px;
+      height: 52px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 6px, #ff7597 6px, #ff7597 12px);
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+    }
+    .flame {
+      width: 18px;
+      height: 26px;
+      background: radial-gradient(ellipse at bottom, #fff 0%, #ffd166 50%, #ff5722 100%);
+      border-radius: 50% 50% 35% 35%;
+      position: absolute;
+      top: -28px;
+      left: -1px;
+      box-shadow: 0 0 18px #ffd166, 0 0 35px #ff9800;
+      animation: flicker 0.18s infinite alternate;
+    }
+    .candle.out .flame {
+      display: none;
+    }
+    @keyframes flicker {
+      from { transform: scale(1) rotate(-2deg); }
+      to { transform: scale(1.08) rotate(2deg); }
+    }
+    .cake-tier-top {
+      width: 170px;
+      height: 65px;
+      background: linear-gradient(180deg, #f4a2b8, #c96d88);
+      margin: 0 auto;
+      border-radius: 14px 14px 4px 4px;
+      border-top: 6px solid #fff3d1;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    .cake-tier-bottom {
+      width: 240px;
+      height: 85px;
+      background: linear-gradient(180deg, #ffd166, #c9962c);
+      margin: 0 auto;
+      border-radius: 14px 14px 8px 8px;
+      border-top: 8px solid #fff;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+
+    /* Guestbook Wall */
+    .guest-form {
+      display: flex;
+      gap: 10px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      flex-wrap: wrap;
+    }
+    .guest-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-glow);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+    .wisher-wall-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .wish-note {
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.12), rgba(244, 162, 184, 0.08));
+      border: 1px solid var(--border-glow);
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 0 20px rgba(255, 209, 102, 0.12);
+    }
+    .wish-stars {
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background & Tap Particle Canvases -->
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Sound Effect Toggle -->
+  <button class="sound-btn" id="sound-toggle">🔊 Magic Sound: ON</button>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <nav class="nav-bar">
+      <button class="nav-btn active" onclick="switchPage('home', this)">🏠 Home</button>
+      <button class="nav-btn" onclick="switchPage('wishes', this)">💌 Wishes</button>
+      <button class="nav-btn" onclick="switchPage('games', this)">🎮 Mini-Games</button>
+      <button class="nav-btn" onclick="switchPage('quiz', this)">❓ Fun Quiz</button>
+      <button class="nav-btn" onclick="switchPage('memories', this)">🌸 Our Memories</button>
+      <button class="nav-btn" onclick="switchPage('guestbook', this)">✍️ Guestbook</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. HOME PAGE -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <h1 class="hero-title">HAPPY BIRTHDAY, GUNNO! 🎂💖</h1>
+        <p class="hero-sub">Welcome to your magical virtual world!</p>
+        <button class="celebrate-btn" onclick="grandCelebration(event)">
+          ✨ CLICK FOR CELEBRATION 🎉
+        </button>
+        <p class="tap-hint">📱 Tap anywhere on the screen to generate magic & sparkles!</p>
+      </div>
+
+      <div class="home-grid">
+        <div class="glass-card" onclick="triggerNav('games')">
+          <div class="card-header">👾 MINI-GAMES <span>(Tap to Play)</span></div>
+          <div class="preview-banner">🎡 🃏 🎁</div>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Play <b>"Memory Roulette"</b> & <b>"Bday Match"</b> to win real-life birthday treats!</p>
+        </div>
+
+        <div class="glass-card" onclick="triggerNav('quiz')">
+          <div class="card-header">🧠 THE GUNNO QUIZ <span>(Simplest Trivia!)</span></div>
+          <div class="preview-banner">👑 🤔 ✨</div>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Answer 4 super fun questions & unlock your <b>Official Best Sister Certificate!</b></p>
+        </div>
+
+        <div class="glass-card" onclick="triggerNav('guestbook')">
+          <div class="card-header">💌 WISHER WALL <span>(Tap to Open)</span></div>
+          <div class="preview-banner">🌟 💖 🥂</div>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Read heartfelt birthday notes & add your own birthday wish to the wall!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. WISHES PAGE (3D FLIP CARDS) -->
+    <section id="page-wishes" class="page">
+      <h2 class="section-title">Royal Wishes for Gunno 💌</h2>
+      <p class="section-sub">Har card par tap karo aur apna special message dekho!</p>
+      <div class="flip-grid">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="icon">👑</div>
+              <h3>The Drama Queen</h3>
+              <p style="color:var(--text-muted); margin-top:8px;">Tap to Flip ✨</p>
+            </div>
+            <div class="flip-back">
+              <p>"Ghar ki rani aur duniya ki sabse badi dramebaaz! Par sach kahun toh tere bina ghar bilkul suna lagta hai. Happy Birthday Gunno! 💖"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="icon">🛡️</div>
+              <h3>Secret Keeper</h3>
+              <p style="color:var(--text-muted); margin-top:8px;">Tap to Flip ✨</p>
+            </div>
+            <div class="flip-back">
+              <p>"Chahe kitni bhi ladai ho jaaye, mummy-papa ki daant se bachane ke liye aur secrets chhupane ke liye tu hi meri #1 partner in crime hai! 😎🙌"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="icon">🌟</div>
+              <h3>Infinite Success</h3>
+              <p style="color:var(--text-muted); margin-top:8px;">Tap to Flip ✨</p>
+            </div>
+            <div class="flip-back">
+              <p>"Bhagwan kare is saal teri saari wishes poori hon, tujhe duniya bhar ki khushiyan milein aur tu hamesha aise hi muskurati rahe! 🎂✨"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. MINI-GAMES PAGE -->
+    <section id="page-games" class="page">
+      <h2 class="section-title">Birthday Arcade 🎮</h2>
+      <p class="section-sub">Jeeto aur apne bhai se birthday gift claim karo!</p>
+
+      <div class="games-wrapper">
+        <!-- Game 1: Bday Match -->
+        <div class="glass-card" style="cursor: default;">
+          <div class="card-header">🃏 Bday Match <span>Moves: <b id="move-count">0</b></span></div>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Match all 6 pairs of birthday symbols!</p>
+          <div class="memory-board" id="memory-board"></div>
+          <button class="small-btn" onclick="initMemoryGame()">🔄 Restart Game</button>
+        </div>
+
+        <!-- Game 2: Memory / Gift Roulette -->
+        <div class="glass-card wheel-box" style="cursor: default;">
+          <div class="card-header" style="width:100%;">🎡 Gift Roulette <span>Spin for a Treat!</span></div>
+          <div class="wheel-container">
+            <div class="wheel-pointer">🔻</div>
+            <canvas id="wheel-canvas" width="260" height="260"></canvas>
+          </div>
+          <p id="wheel-result" style="font-weight:700; color:var(--gold); min-height:24px;">Tap Spin to win your gift!</p>
+          <button class="small-btn" onclick="spinWheel()">🎰 SPIN THE WHEEL</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. FUN QUIZ PAGE -->
+    <section id="page-quiz" class="page">
+      <h2 class="section-title">The Gunno Quiz 🧠</h2>
+      <p class="section-sub">Duniya ka sabse aasan aur mazedar test!</p>
+      <div class="glass-card quiz-box" id="quiz-container" style="cursor: default;"></div>
+    </section>
+
+    <!-- 5. OUR MEMORIES & VIRTUAL CAKE -->
+    <section id="page-memories" class="page">
+      <h2 class="section-title">Make a Birthday Wish! 🎂</h2>
+      <p class="section-sub">Teeno candles par tap karke unhe blow (bujhao) karo aur apni wish maango!</p>
+
+      <div class="glass-card cake-stage" style="max-width: 540px; margin: 0 auto;">
+        <div class="candles-row">
+          <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
+          <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
+          <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
+        </div>
+        <div class="cake-tier-top"></div>
+        <div class="cake-tier-bottom"></div>
+        <h3 id="cake-msg" style="margin-top: 24px; color: var(--gold);">✨ Tap on each candle flame to blow it out! ✨</h3>
+        <button class="small-btn" onclick="relightCandles()" style="margin-top:16px;">🔥 Relight Candles</button>
+      </div>
+    </section>
+
+    <!-- 6. GUESTBOOK / WISHER WALL -->
+    <section id="page-guestbook" class="page">
+      <h2 class="section-title">Wisher Wall ✍️</h2>
+      <p class="section-sub">Gunno ke liye apna pyara sa birthday note yahan likho!</p>
+
+      <div class="guest-form">
+        <input type="text" id="wish-author" class="guest-input" placeholder="Aapka Naam (e.g., Bhai)" style="max-width: 200px;" />
+        <input type="text" id="wish-text" class="guest-input" placeholder="Write a magical birthday wish for Gunno..." />
+        <button class="small-btn" style="margin-top:0;" onclick="addWish()">💖 Post Wish</button>
+      </div>
+
+      <div class="wisher-wall-grid" id="wisher-wall"></div>
+    </section>
+  </main>
+
+  <script>
+    /* ==========================================
+       1. WEB AUDIO SYNTHESIZER (NO EXTERNAL FILES)
+    ========================================== */
+    let soundEnabled = true;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function playTone(freq = 600, type = 'sine', duration = 0.15) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playCelebrationFanfare() {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((n, i) => setTimeout(() => playTone(n, 'triangle', 0.28), i * 110));
+    }
+
+    document.getElementById('sound-toggle').addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEnabled = !soundEnabled;
+      e.target.textContent = soundEnabled ? '🔊 Magic Sound: ON' : '🔇 Magic Sound: OFF';
+    });
+
+    /* ==========================================
+       2. SMOOTH SPA NAVIGATION
+    ========================================== */
+    function switchPage(pageId, btnEl) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      playTone(720, 'sine', 0.12);
+    }
+
+    function triggerNav(pageId) {
+      const buttons = document.querySelectorAll('.nav-btn');
+      const map = { home: 0, wishes: 1, games: 2, quiz: 3, memories: 4, guestbook: 5 };
+      switchPage(pageId, buttons[map[pageId]]);
+    }
+
+    /* ==========================================
+       3. 60FPS PARTICLE & TAP CELEBRATION ENGINE
+    ========================================== */
+    const bgCanvas = document.getElementById('bg-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    const fxCanvas = document.getElementById('fx-canvas');
+    const fxCtx = fxCanvas.getContext('2d');
+
+    let W, H;
+    function resizeCanvases() {
+      W = bgCanvas.width = fxCanvas.width = window.innerWidth;
+      H = bgCanvas.height = fxCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+
+    // Floating ambient gold dust
+    const stars = Array.from({ length: 55 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 2.2 + 0.6,
+      vy: -(Math.random() * 0.4 + 0.15),
+      alpha: Math.random() * 0.7 + 0.2
+    }));
+
+    // Interactive burst particles
+    const particles = [];
+    const colors = ['#ffd166', '#f4a2b8', '#ffe699', '#ff7597', '#ffffff', '#c084fc'];
+
+    function spawnBurst(x, y, count = 28) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 6 + 1.5;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1.5,
+          size: Math.random() * 5 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: Math.random() * 0.02 + 0.012
+        });
+      }
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      spawnBurst(e.clientX, e.clientY, 24);
+      playTone(500 + Math.random() * 400, 'sine', 0.1);
+    });
+
+    function grandCelebration(e) {
+      e.stopPropagation();
+      playCelebrationFanfare();
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+          spawnBurst(
+            W * (0.2 + Math.random() * 0.6),
+            H * (0.2 + Math.random() * 0.5),
+            55
+          );
+        }, i * 180);
+      }
+    }
+
+    function animateCanvases() {
+      bgCtx.clearRect(0, 0, W, H);
+      stars.forEach(s => {
+        s.y += s.vy;
+        if (s.y < 0) { s.y = H; s.x = Math.random() * W; }
+        bgCtx.beginPath();
+        bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        bgCtx.fillStyle = `rgba(255, 209, 102, ${s.alpha})`;
+        bgCtx.fill();
+      });
+
+      fxCtx.clearRect(0, 0, W, H);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.12; // subtle gravity
+        p.alpha -= p.decay;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        fxCtx.save();
+        fxCtx.globalAlpha = p.alpha;
+        fxCtx.fillStyle = p.color;
+        fxCtx.shadowBlur = 10;
+        fxCtx.shadowColor = p.color;
+        fxCtx.beginPath();
+        fxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        fxCtx.fill();
+        fxCtx.restore();
+      }
+      requestAnimationFrame(animateCanvases);
+    }
+    animateCanvases();
+
+    /* ==========================================
+       4. MINI-GAME 1: BDAY MATCH
+    ========================================== */
+    const emojis = ['👑', '🎂', '🎁', '💖', '🍫', '✨'];
+    let deck = [], flipped = [], matchedCount = 0, moves = 0;
+
+    function initMemoryGame() {
+      const board = document.getElementById('memory-board');
+      board.innerHTML = '';
+      deck = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+      flipped = [];
+      matchedCount = 0;
+      moves = 0;
+      document.getElementById('move-count').textContent = moves;
+
+      deck.forEach((symbol) => {
+        const tile = document.createElement('div');
+        tile.className = 'mem-tile';
+        tile.dataset.symbol = symbol;
+        tile.textContent = '❔';
+        tile.onclick = () => flipTile(tile);
+        board.appendChild(tile);
+      });
+    }
+
+    function flipTile(tile) {
+      if (flipped.length === 2 || tile.classList.contains('matched') || flipped.includes(tile)) return;
+      tile.textContent = tile.dataset.symbol;
+      flipped.push(tile);
+      playTone(680, 'sine', 0.1);
+
+      if (flipped.length === 2) {
+        moves++;
+        document.getElementById('move-count').textContent = moves;
+        const [a, b] = flipped;
+        if (a.dataset.symbol === b.dataset.symbol) {
+          a.classList.add('matched');
+          b.classList.add('matched');
+          flipped = [];
+          matchedCount++;
+          playCelebrationFanfare();
+          if (matchedCount === emojis.length) {
+            setTimeout(() => alert('🎉 Woohoo Gunno! You matched them all in ' + moves + ' moves!'), 250);
+          }
+        } else {
+          setTimeout(() => {
+            a.textContent = '❔';
+            b.textContent = '❔';
+            flipped = [];
+          }, 650);
+        }
+      }
+    }
+    initMemoryGame();
+
+    /* ==========================================
+       5. MINI-GAME 2: GIFT ROULETTE WHEEL
+    ========================================== */
+    const prizes = ['🍫 Silk Treat', '🍕 Pizza Party', '💸 ₹500 Shagun', '📺 TV Remote', '🍨 Ice Cream', '🤗 Big Hug'];
+    const wheelColors = ['#6b21a8', '#be185d', '#b45309', '#4338ca', '#9d174d', '#a16207'];
+    const wCanvas = document.getElementById('wheel-canvas');
+    const wCtx = wCanvas.getContext('2d');
+    let currentRot = 0;
+
+    function drawWheel() {
+      const arc = (Math.PI * 2) / prizes.length;
+      prizes.forEach((prize, i) => {
+        const angle = i * arc;
+        wCtx.beginPath();
+        wCtx.fillStyle = wheelColors[i];
+        wCtx.moveTo(130, 130);
+        wCtx.arc(130, 130, 128, angle, angle + arc);
+        wCtx.fill();
+        wCtx.save();
+        wCtx.translate(130, 130);
+        wCtx.rotate(angle + arc / 2);
+        wCtx.fillStyle = '#fff';
+        wCtx.font = 'bold 13px Plus Jakarta Sans';
+        wCtx.fillText(prize, 42, 5);
+        wCtx.restore();
+      });
+    }
+    drawWheel();
+
+    function spinWheel() {
+      const extraSpins = 1440 + Math.floor(Math.random() * 1080);
+      currentRot += extraSpins;
+      wCanvas.style.transform = `rotate(${currentRot}deg)`;
+      document.getElementById('wheel-result').textContent = 'Spinning... 🎰';
+      playCelebrationFanfare();
+      setTimeout(() => {
+        const winningPrize = prizes[Math.floor(Math.random() * prizes.length)];
+        document.getElementById('wheel-result').textContent = `🎉 You Won: ${winningPrize}! (Take a screenshot!)`;
+        spawnBurst(W / 2, H / 2, 50);
+      }, 4000);
+    }
+
+    /* ==========================================
+       6. THE GUNNO QUIZ
+    ========================================== */
+    const quizData = [
+      {
+        q: "Q1. Ghar mein sabse zyada nakhre aur drama kaun karta hai? 👑",
+        opts: ["Obviously Gunno 😎", "100% Gunno 😂", "Bina kisi doubt ke Gunno 💖"]
+      },
+      {
+        q: "Q2. Gunno ka gussa shant karne ka sabse teer-kamaan tarika kya hai? 🍫",
+        opts: ["Tasty Khana / Chocolate 🍕", "Thodi si Tareef ✨", "Shopping & Gifts 🛍️"]
+      },
+      {
+        q: "Q3. Duniya ka sabse smart, best aur caring bhai kaun hai? 😎",
+        opts: ["Jisne ye website banayi! 💻", "Option A hi sahi hai 🙌", "Mere Bhai ke alawa aur kaun! 🔥"]
+      },
+      {
+        q: "Q4. Aaj birthday par Gunno ko kitni khushiyan milni chahiye? 🎉",
+        opts: ["Unlimited + Infinity ♾️💖", "Aasman ke taaron jitni 🌟", "Dono Options! 🎂"]
+      }
+    ];
+    let qIndex = 0;
+
+    function renderQuiz() {
+      const box = document.getElementById('quiz-container');
+      if (qIndex >= quizData.length) {
+        box.innerHTML = `
+          <div style="font-size:3.5rem; margin-bottom:10px;">🏆👑✨</div>
+          <h3 style="color:var(--gold); font-size:1.6rem; margin-bottom:10px;">OFFICIAL CERTIFICATE</h3>
+          <p style="font-size:1.05rem; line-height:1.6; margin-bottom:18px;">
+            This certifies that <b>GUNNO</b> is officially the <b>World's Best, Cutest & Most Awesome Sister!</b> 💖
+          </p>
+          <button class="small-btn" onclick="qIndex=0; renderQuiz();">🔄 Play Quiz Again</button>
+        `;
+        playCelebrationFanfare();
+        return;
+      }
+      const item = quizData[qIndex];
+      box.innerHTML = `
+        <h3 style="color:var(--gold); margin-bottom:18px; font-size:1.25rem;">${item.q}</h3>
+        ${item.opts.map(o => `<button class="quiz-option" onclick="nextQuestion()">${o}</button>`).join('')}
+      `;
+    }
+    function nextQuestion() {
+      qIndex++;
+      playTone(820, 'triangle', 0.15);
+      renderQuiz();
+    }
+    renderQuiz();
+
+    /* ==========================================
+       7. VIRTUAL CAKE CANDLES
+    ========================================== */
+    function blowCandle(el) {
+      if (!el.classList.contains('out')) {
+        el.classList.add('out');
+        playTone(400, 'sine', 0.25);
+        const remaining = document.querySelectorAll('.candle:not(.out)').length;
+        if (remaining === 0) {
+          document.getElementById('cake-msg').textContent = '🎉 YAY! HAPPY BIRTHDAY GUNNO! May all your wishes come true! 💖';
+          playCelebrationFanfare();
+          spawnBurst(W / 2, H / 2, 70);
+        }
+      }
+    }
+    function relightCandles() {
+      document.querySelectorAll('.candle').forEach(c => c.classList.remove('out'));
+      document.getElementById('cake-msg').textContent = '✨ Tap on each candle flame to blow it out! ✨';
+    }
+
+    /* ==========================================
+       8. WISHER WALL (GUESTBOOK)
+    ========================================== */
+    const defaultWishes = [
+      { name: "Tera Bhai 😎", text: "Happy Birthday Gunno! Hamesha khush reh aur aise hi muskurati reh! 💖🎂" },
+      { name: "Family 🌟", text: "Wishing our dearest Gunno a magical year filled with success and endless smiles! ✨" },
+      { name: "Bestie 🥂", text: "Happy Birthday Queen! Party kab de rahi hai ye bata bas! 🎉🍕" }
+    ];
+
+    function renderWishes() {
+      const wall = document.getElementById('wisher-wall');
+      wall.innerHTML = defaultWishes.map(w => `
+        <div class="wish-note">
+          <div class="wish-stars">★ ★ ★ ★ ★</div>
+          <p style="margin-bottom:12px; line-height:1.5;">"${w.text}"</p>
+          <b style="color:var(--gold);">— ${w.name}</b>
+        </div>
+      `).join('');
+    }
+    function addWish() {
+      const author = document.getElementById('wish-author').value.trim() || 'Secret Wisher';
+      const text = document.getElementById('wish-text').value.trim();
+      if (!text) return;
+      defaultWishes.unshift({ name: author, text });
+      document.getElementById('wish-text').value = '';
+      renderWishes();
+      playCelebrationFanfare();
+    }
+    renderWishes();
+  </script>
+</body>
+</html>
